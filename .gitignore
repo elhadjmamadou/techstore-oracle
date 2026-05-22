@@ -1,0 +1,68 @@
+# ============================================================
+# .gitignore — Projet TechStore Oracle
+# ============================================================
+
+# ── Environnement ───────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ── IDE : DataGrip / IntelliJ ───────────────────────────────
+.idea/
+*.iml
+*.iws
+*.ipr
+shelf/
+workspace.xml
+dataSources/
+dataSources.local.xml
+
+# ── IDE : VS Code ────────────────────────────────────────────
+.vscode/
+
+# ── Oracle : fichiers de trace et de log ────────────────────
+*.log
+*.trc
+*.trm
+*.aud
+spool/
+*.lst
+
+# ── Oracle : dumps et exports ────────────────────────────────
+*.dmp
+*.exp
+*.bak
+
+# ── RMAN : sauvegardes locales ───────────────────────────────
+recovery_area/
+rman_backup/
+*.bkp
+*.rman.log
+
+# ── Fichiers temporaires ─────────────────────────────────────
+*.tmp
+*.temp
+*~
+*.swp
+*.swo
+
+# ── OS ───────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Archives ─────────────────────────────────────────────────
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# ── Captures d'écran (optionnel — décommenter si non suivies)─
+# captures/
+# 10_rapport/images/
+# 01_modelisation_conception/traces/*.png
+
+# ── Fichiers Office temporaires ──────────────────────────────
+~$*.docx
+~$*.xlsx
+~$*.pptx
