@@ -1,0 +1,30 @@
+CREATE TABLE COMMANDE_PARTITIONNEE
+PARTITION BY RANGE (date_commande)
+(
+   PARTITION cmd_2025_t4 VALUES LESS THAN (DATE '2026-01-01'),
+   PARTITION cmd_2026_t1 VALUES LESS THAN (DATE '2026-04-01'),
+   PARTITION cmd_2026_t2 VALUES LESS THAN (DATE '2026-07-01'),
+   PARTITION cmd_2026_t3 VALUES LESS THAN (DATE '2026-10-01'),
+   PARTITION cmd_2026_t4 VALUES LESS THAN (DATE '2027-01-01'),
+   PARTITION cmd_autres  VALUES LESS THAN (MAXVALUE)
+)
+AS
+SELECT *
+FROM COMMANDE;
+
+SELECT table_name, partition_name, high_value
+FROM user_tab_partitions
+WHERE table_name = 'COMMANDE_PARTITIONNEE'
+ORDER BY partition_position;
+
+SELECT partition_name, COUNT(*) AS nombre_commandes
+FROM COMMANDE_PARTITIONNEE PARTITION (cmd_2025_t4)
+GROUP BY partition_name;
+
+SELECT partition_name, COUNT(*) AS nombre_commandes
+FROM COMMANDE_PARTITIONNEE PARTITION (cmd_2026_t1)
+GROUP BY partition_name;
+
+SELECT partition_name, COUNT(*) AS nombre_commandes
+FROM COMMANDE_PARTITIONNEE PARTITION (cmd_2026_t2)
+GROUP BY partition_name;

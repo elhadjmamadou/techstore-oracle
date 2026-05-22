@@ -1,0 +1,86 @@
+CREATE ROLE role_ventes;
+CREATE ROLE role_stock;
+CREATE ROLE role_admin;
+CREATE ROLE role_client;
+
+GRANT SELECT ON PRODUIT TO role_ventes;
+GRANT SELECT, INSERT, UPDATE ON COMMANDE TO role_ventes;
+GRANT SELECT ON seq_commande TO role_ventes;
+
+GRANT SELECT, UPDATE ON PRODUIT TO role_stock;
+GRANT INSERT, UPDATE ON STOCK_HISTORIQUE TO role_stock;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON CATEGORIE TO role_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON FOURNISSEUR TO role_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON CLIENT TO role_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON PRODUIT TO role_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON COMMANDE TO role_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON LIGNE_COMMANDE TO role_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON AVIS TO role_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON STOCK_HISTORIQUE TO role_admin;
+
+GRANT CREATE USER TO role_admin;
+GRANT CREATE TABLE TO role_admin;
+
+GRANT SELECT ON PRODUIT TO role_client;
+GRANT INSERT ON COMMANDE TO role_client;
+GRANT SELECT ON seq_commande TO role_client;
+
+CREATE TABLE UTILISATEUR_CLIENT (
+   nom_utilisateur VARCHAR2(30) NOT NULL,
+   id_client       NUMBER(10) NOT NULL,
+
+   CONSTRAINT pk_utilisateur_client PRIMARY KEY (nom_utilisateur),
+   CONSTRAINT fk_utilisateur_client_client FOREIGN KEY (id_client)
+      REFERENCES CLIENT(id_client)
+);
+
+INSERT INTO UTILISATEUR_CLIENT VALUES ('CLIENT_DEMO', 1000);
+
+CREATE OR REPLACE VIEW vue_mes_commandes AS
+SELECT
+   c.num_commande,
+   c.id_client,
+   c.date_commande,
+   c.date_livraison_prevue,
+   c.date_livraison_reelle,
+   c.montant_total,
+   c.statut
+FROM COMMANDE c
+JOIN UTILISATEUR_CLIENT uc
+   ON uc.id_client = c.id_client
+WHERE uc.nom_utilisateur = USER;
+
+GRANT SELECT ON vue_mes_commandes TO role_client;
+
+CREATE USER u_ventes IDENTIFIED BY "Ventes#2026"
+DEFAULT TABLESPACE users
+TEMPORARY TABLESPACE temp
+QUOTA 20M ON users;
+
+CREATE USER u_stock IDENTIFIED BY "Stock#2026"
+DEFAULT TABLESPACE users
+TEMPORARY TABLESPACE temp
+QUOTA 20M ON users;
+
+CREATE USER u_admin IDENTIFIED BY "Admin#2026"
+DEFAULT TABLESPACE users
+TEMPORARY TABLESPACE temp
+QUOTA 50M ON users;
+
+CREATE USER client_demo IDENTIFIED BY "Client#2026"
+DEFAULT TABLESPACE users
+TEMPORARY TABLESPACE temp
+QUOTA 10M ON users;
+
+GRANT CREATE SESSION TO u_ventes;
+GRANT CREATE SESSION TO u_stock;
+GRANT CREATE SESSION TO u_admin;
+GRANT CREATE SESSION TO client_demo;
+
+GRANT role_ventes TO u_ventes;
+GRANT role_stock TO u_stock;
+GRANT role_admin TO u_admin;
+GRANT role_client TO client_demo;
+
+COMMIT;

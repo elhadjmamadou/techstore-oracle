@@ -1,0 +1,21 @@
+Génération Partie 1 - Modélisation et conception
+Date : 2026-05-21 12:03:21
+
+Livrables générés :
+- 1_1_cahier_des_charges.md
+- 1_2_contraintes_integrite.md
+- 1_3_dictionnaire_donnees.xlsx
+- mcd/MCD_TechStore.png
+- mcd/MCD_TechStore.pdf
+- mcd/MCD_TechStore.dot
+- mld/MLD_TechStore.png
+- mld/MLD_TechStore.pdf
+- mld/MLD_TechStore.md
+- mld/MLD_TechStore.dot
+- traces/README.md
+
+Vérifications réalisées :
+- génération des images PNG via Graphviz
+- génération des PDF via Graphviz
+- rendu de vérification des PDF
+- contrôle rapide du dictionnaire Excel avec artifact_tool

@@ -1,0 +1,126 @@
+digraph MLD_TechStore {
+    graph [
+        rankdir=LR,
+        splines=true,
+        nodesep=0.6,
+        ranksep=1.1,
+        pad=0.4,
+        bgcolor="white",
+        label="MLD - TechStore : tables, clés primaires et clés étrangères",
+        labelloc=t,
+        fontsize=22,
+        fontname="DejaVu Sans",
+        margin=0.2
+    ];
+
+    node [shape=plaintext, fontname="DejaVu Sans", fontsize=9];
+    edge [fontname="DejaVu Sans", fontsize=8, color="#374151", arrowsize=0.7];
+
+    CATEGORIE [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#0891B2">
+      <TR><TD BGCOLOR="#0891B2"><FONT COLOR="white"><B>CATEGORIE</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> code_categorie</TD></TR>
+      <TR><TD ALIGN="LEFT">nom</TD></TR>
+      <TR><TD ALIGN="LEFT">description</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>FK</B> code_categorie_parent</TD></TR>
+    </TABLE>>];
+
+    FOURNISSEUR [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#4D7C0F">
+      <TR><TD BGCOLOR="#4D7C0F"><FONT COLOR="white"><B>FOURNISSEUR</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> id_fournisseur</TD></TR>
+      <TR><TD ALIGN="LEFT">raison_sociale</TD></TR>
+      <TR><TD ALIGN="LEFT">contact</TD></TR>
+      <TR><TD ALIGN="LEFT">telephone</TD></TR>
+      <TR><TD ALIGN="LEFT">email</TD></TR>
+      <TR><TD ALIGN="LEFT">adresse</TD></TR>
+      <TR><TD ALIGN="LEFT">delai_livraison</TD></TR>
+    </TABLE>>];
+
+    PRODUIT [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#EA580C">
+      <TR><TD BGCOLOR="#EA580C"><FONT COLOR="white"><B>PRODUIT</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> code_produit</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>FK</B> code_categorie</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>FK</B> id_fournisseur</TD></TR>
+      <TR><TD ALIGN="LEFT">nom</TD></TR>
+      <TR><TD ALIGN="LEFT">description</TD></TR>
+      <TR><TD ALIGN="LEFT">prix_achat</TD></TR>
+      <TR><TD ALIGN="LEFT">prix_vente</TD></TR>
+      <TR><TD ALIGN="LEFT">stock</TD></TR>
+      <TR><TD ALIGN="LEFT">seuil_alerte</TD></TR>
+      <TR><TD ALIGN="LEFT">date_creation</TD></TR>
+      <TR><TD ALIGN="LEFT">statut</TD></TR>
+    </TABLE>>];
+
+    CLIENT [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#0F766E">
+      <TR><TD BGCOLOR="#0F766E"><FONT COLOR="white"><B>CLIENT</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> id_client</TD></TR>
+      <TR><TD ALIGN="LEFT">civilite</TD></TR>
+      <TR><TD ALIGN="LEFT">nom</TD></TR>
+      <TR><TD ALIGN="LEFT">prenom</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>UN</B> email</TD></TR>
+      <TR><TD ALIGN="LEFT">telephone</TD></TR>
+      <TR><TD ALIGN="LEFT">adresse</TD></TR>
+      <TR><TD ALIGN="LEFT">code_postal</TD></TR>
+      <TR><TD ALIGN="LEFT">ville</TD></TR>
+      <TR><TD ALIGN="LEFT">date_inscription</TD></TR>
+      <TR><TD ALIGN="LEFT">points_fidelite</TD></TR>
+    </TABLE>>];
+
+    COMMANDE [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#2563EB">
+      <TR><TD BGCOLOR="#2563EB"><FONT COLOR="white"><B>COMMANDE</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> num_commande</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>FK</B> id_client</TD></TR>
+      <TR><TD ALIGN="LEFT">date_commande</TD></TR>
+      <TR><TD ALIGN="LEFT">date_livraison_prevue</TD></TR>
+      <TR><TD ALIGN="LEFT">date_livraison_reelle</TD></TR>
+      <TR><TD ALIGN="LEFT">montant_total</TD></TR>
+      <TR><TD ALIGN="LEFT">statut</TD></TR>
+    </TABLE>>];
+
+    LIGNE_COMMANDE [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#7C3AED">
+      <TR><TD BGCOLOR="#7C3AED"><FONT COLOR="white"><B>LIGNE_COMMANDE</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> id_ligne</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>FK</B> num_commande</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>FK</B> code_produit</TD></TR>
+      <TR><TD ALIGN="LEFT">quantite</TD></TR>
+      <TR><TD ALIGN="LEFT">prix_unitaire</TD></TR>
+      <TR><TD ALIGN="LEFT">remise</TD></TR>
+    </TABLE>>];
+
+    AVIS [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#BE123C">
+      <TR><TD BGCOLOR="#BE123C"><FONT COLOR="white"><B>AVIS</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> id_avis</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>FK</B> id_client</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>FK</B> code_produit</TD></TR>
+      <TR><TD ALIGN="LEFT">note</TD></TR>
+      <TR><TD ALIGN="LEFT">commentaire</TD></TR>
+      <TR><TD ALIGN="LEFT">date_avis</TD></TR>
+    </TABLE>>];
+
+    STOCK_HISTORIQUE [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#6B7280">
+      <TR><TD BGCOLOR="#6B7280"><FONT COLOR="white"><B>STOCK_HISTORIQUE</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> id_historique</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>FK</B> code_produit</TD></TR>
+      <TR><TD ALIGN="LEFT">date_mouvement</TD></TR>
+      <TR><TD ALIGN="LEFT">type_mouvement</TD></TR>
+      <TR><TD ALIGN="LEFT">quantite</TD></TR>
+      <TR><TD ALIGN="LEFT">stock_apres_mouvement</TD></TR>
+    </TABLE>>];
+
+    CATEGORIE -> CATEGORIE [label="fk_categorie_parent"];
+    PRODUIT -> CATEGORIE [label="fk_produit_categorie"];
+    PRODUIT -> FOURNISSEUR [label="fk_produit_fournisseur"];
+    COMMANDE -> CLIENT [label="fk_commande_client"];
+    LIGNE_COMMANDE -> COMMANDE [label="fk_ligne_commande"];
+    LIGNE_COMMANDE -> PRODUIT [label="fk_ligne_produit"];
+    AVIS -> CLIENT [label="fk_avis_client"];
+    AVIS -> PRODUIT [label="fk_avis_produit"];
+    STOCK_HISTORIQUE -> PRODUIT [label="fk_stock_produit"];
+}

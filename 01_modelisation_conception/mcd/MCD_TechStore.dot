@@ -1,0 +1,146 @@
+digraph MCD_TechStore {
+    graph [
+        rankdir=LR,
+        splines=true,
+        nodesep=0.7,
+        ranksep=1.0,
+        pad=0.4,
+        bgcolor="white",
+        label="MCD - TechStore : Solution complète de gestion de ventes en ligne",
+        labelloc=t,
+        fontsize=22,
+        fontname="DejaVu Sans",
+        margin=0.2
+    ];
+
+    node [fontname="DejaVu Sans", fontsize=10, shape=plaintext];
+    edge [fontname="DejaVu Sans", fontsize=9, color="#374151", arrowsize=0.7];
+
+    CLIENT [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" COLOR="#0F766E">
+      <TR><TD BGCOLOR="#0F766E"><FONT COLOR="white"><B>CLIENT</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><U>id_client</U></TD></TR>
+      <TR><TD ALIGN="LEFT">civilite</TD></TR>
+      <TR><TD ALIGN="LEFT">nom</TD></TR>
+      <TR><TD ALIGN="LEFT">prenom</TD></TR>
+      <TR><TD ALIGN="LEFT">email</TD></TR>
+      <TR><TD ALIGN="LEFT">telephone</TD></TR>
+      <TR><TD ALIGN="LEFT">adresse</TD></TR>
+      <TR><TD ALIGN="LEFT">code_postal</TD></TR>
+      <TR><TD ALIGN="LEFT">ville</TD></TR>
+      <TR><TD ALIGN="LEFT">date_inscription</TD></TR>
+      <TR><TD ALIGN="LEFT">points_fidelite</TD></TR>
+    </TABLE>>];
+
+    COMMANDE [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" COLOR="#2563EB">
+      <TR><TD BGCOLOR="#2563EB"><FONT COLOR="white"><B>COMMANDE</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><U>num_commande</U></TD></TR>
+      <TR><TD ALIGN="LEFT">date_commande</TD></TR>
+      <TR><TD ALIGN="LEFT">date_livraison_prevue</TD></TR>
+      <TR><TD ALIGN="LEFT">date_livraison_reelle</TD></TR>
+      <TR><TD ALIGN="LEFT">montant_total</TD></TR>
+      <TR><TD ALIGN="LEFT">statut</TD></TR>
+    </TABLE>>];
+
+    LIGNE_COMMANDE [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" COLOR="#7C3AED">
+      <TR><TD BGCOLOR="#7C3AED"><FONT COLOR="white"><B>LIGNE_COMMANDE</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><U>id_ligne</U></TD></TR>
+      <TR><TD ALIGN="LEFT">quantite</TD></TR>
+      <TR><TD ALIGN="LEFT">prix_unitaire</TD></TR>
+      <TR><TD ALIGN="LEFT">remise</TD></TR>
+    </TABLE>>];
+
+    PRODUIT [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" COLOR="#EA580C">
+      <TR><TD BGCOLOR="#EA580C"><FONT COLOR="white"><B>PRODUIT</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><U>code_produit</U></TD></TR>
+      <TR><TD ALIGN="LEFT">nom</TD></TR>
+      <TR><TD ALIGN="LEFT">description</TD></TR>
+      <TR><TD ALIGN="LEFT">prix_achat</TD></TR>
+      <TR><TD ALIGN="LEFT">prix_vente</TD></TR>
+      <TR><TD ALIGN="LEFT">stock</TD></TR>
+      <TR><TD ALIGN="LEFT">seuil_alerte</TD></TR>
+      <TR><TD ALIGN="LEFT">date_creation</TD></TR>
+      <TR><TD ALIGN="LEFT">statut</TD></TR>
+    </TABLE>>];
+
+    CATEGORIE [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" COLOR="#0891B2">
+      <TR><TD BGCOLOR="#0891B2"><FONT COLOR="white"><B>CATEGORIE</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><U>code_categorie</U></TD></TR>
+      <TR><TD ALIGN="LEFT">nom</TD></TR>
+      <TR><TD ALIGN="LEFT">description</TD></TR>
+      <TR><TD ALIGN="LEFT">categorie_parente</TD></TR>
+    </TABLE>>];
+
+    FOURNISSEUR [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" COLOR="#4D7C0F">
+      <TR><TD BGCOLOR="#4D7C0F"><FONT COLOR="white"><B>FOURNISSEUR</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><U>id_fournisseur</U></TD></TR>
+      <TR><TD ALIGN="LEFT">raison_sociale</TD></TR>
+      <TR><TD ALIGN="LEFT">contact</TD></TR>
+      <TR><TD ALIGN="LEFT">telephone</TD></TR>
+      <TR><TD ALIGN="LEFT">email</TD></TR>
+      <TR><TD ALIGN="LEFT">adresse</TD></TR>
+      <TR><TD ALIGN="LEFT">delai_livraison</TD></TR>
+    </TABLE>>];
+
+    AVIS [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" COLOR="#BE123C">
+      <TR><TD BGCOLOR="#BE123C"><FONT COLOR="white"><B>AVIS</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><U>id_avis</U></TD></TR>
+      <TR><TD ALIGN="LEFT">note</TD></TR>
+      <TR><TD ALIGN="LEFT">commentaire</TD></TR>
+      <TR><TD ALIGN="LEFT">date_avis</TD></TR>
+    </TABLE>>];
+
+    STOCK_HISTORIQUE [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" COLOR="#6B7280">
+      <TR><TD BGCOLOR="#6B7280"><FONT COLOR="white"><B>STOCK_HISTORIQUE</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><U>id_historique</U></TD></TR>
+      <TR><TD ALIGN="LEFT">date_mouvement</TD></TR>
+      <TR><TD ALIGN="LEFT">type_mouvement</TD></TR>
+      <TR><TD ALIGN="LEFT">quantite</TD></TR>
+      <TR><TD ALIGN="LEFT">stock_apres_mouvement</TD></TR>
+    </TABLE>>];
+
+    node [shape=diamond, style=filled, fillcolor="#F3F4F6", color="#111827", fontsize=9, width=1.1, height=0.7];
+    PASSER [label="PASSER"];
+    CONTENIR [label="CONTENIR"];
+    CONCERNER [label="CONCERNER"];
+    CLASSER [label="CLASSER"];
+    HIERARCHISER [label="AVOIR\nPARENT"];
+    FOURNIR [label="FOURNIR"];
+    REDIGER [label="REDIGER"];
+    EVALUER [label="EVALUER"];
+    HISTORISER [label="HISTORISER"];
+
+    CLIENT -> PASSER [label="0,N"];
+    PASSER -> COMMANDE [label="1,1"];
+
+    COMMANDE -> CONTENIR [label="1,N"];
+    CONTENIR -> LIGNE_COMMANDE [label="1,1"];
+
+    PRODUIT -> CONCERNER [label="0,N"];
+    CONCERNER -> LIGNE_COMMANDE [label="1,1"];
+
+    CATEGORIE -> CLASSER [label="0,N"];
+    CLASSER -> PRODUIT [label="1,1"];
+
+    CATEGORIE -> HIERARCHISER [label="parent 0,N"];
+    HIERARCHISER -> CATEGORIE [label="enfant 0,1"];
+
+    FOURNISSEUR -> FOURNIR [label="0,N"];
+    FOURNIR -> PRODUIT [label="1,1"];
+
+    CLIENT -> REDIGER [label="0,N"];
+    REDIGER -> AVIS [label="1,1"];
+
+    PRODUIT -> EVALUER [label="0,N"];
+    EVALUER -> AVIS [label="1,1"];
+
+    PRODUIT -> HISTORISER [label="0,N"];
+    HISTORISER -> STOCK_HISTORIQUE [label="1,1"];
+}
