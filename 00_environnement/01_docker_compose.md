@@ -4,15 +4,17 @@
 
 Ce document décrit l'environnement Oracle utilisé pour le projet TechStore.
 
-La base Oracle tourne dans un conteneur Docker séparé du dossier projet.
+La base Oracle tourne dans un conteneur Docker **séparé** du dossier projet.
 
-## Emplacement du conteneur Oracle
+---
 
-Dossier Oracle local :
+## Emplacement du fichier docker-compose
 
 ```text
-../oracle/
+../oracle/docker-compose.yml
 ```
+
+---
 
 ## Démarrage du conteneur
 
@@ -27,38 +29,64 @@ docker-compose up -d
 docker ps
 ```
 
+Résultat attendu :
+```
+CONTAINER ID   IMAGE                      PORTS                    NAMES
+xxxxxxxxxxxx   gvenzl/oracle-free:latest  0.0.0.0:1521->1521/tcp   oracle-free
+```
+
+---
+
 ## Arrêt du conteneur
 
 ```bash
 docker-compose down
 ```
 
+---
+
 ## Vérification des logs
 
 ```bash
-docker logs oracle-db
-# ou
-docker logs -f oracle-db
+docker logs oracle-free
+# Suivi en temps réel :
+docker logs -f oracle-free
 ```
 
-## Informations de connexion
+---
 
-| Paramètre     | Valeur             |
-|---------------|--------------------|
-| Host          | localhost          |
-| Port          | 1521               |
-| SID / Service | ORCLCDB / ORCLPDB1 |
-| Utilisateur   | system / sys       |
-| Mot de passe  | oracle             |
+## Informations de connexion (CORRIGÉ)
 
-## Connexion via SQL*Plus
+| Paramètre     | Valeur                  |
+|---------------|-------------------------|
+| Conteneur     | oracle-free             |
+| Image         | gvenzl/oracle-free:latest |
+| Host          | localhost               |
+| Port          | 1521                    |
+| Service       | FREEPDB1                |
+| Utilisateur projet | techstore          |
+| Mot de passe  | techstore               |
+| Utilisateur admin | system / sys        |
+| Mot de passe admin | Voir .env          |
+
+---
+
+## Connexion SQL*Plus depuis le terminal Ubuntu
 
 ```bash
-docker exec -it oracle-db sqlplus system/oracle@//localhost:1521/ORCLPDB1
+# Connexion utilisateur projet TECHSTORE
+docker exec -it oracle-free sqlplus techstore/techstore@//localhost:1521/FREEPDB1
+
+# Connexion administrateur SYSDBA (nécessaire pour ARCHIVELOG, RMAN, etc.)
+docker exec -it oracle-free sqlplus 'sys/ChangeMoiFort123!@//localhost:1521/FREEPDB1 as sysdba'
 ```
 
-## Notes
+---
 
-- Le conteneur doit être démarré **avant** toute connexion DataGrip ou SQL*Plus.
+## Notes importantes
+
+- Le conteneur doit être **démarré avant** toute connexion DataGrip ou SQL*Plus.
 - Le premier démarrage peut prendre plusieurs minutes (initialisation de la base).
+- Les commandes ARCHIVELOG, RMAN et STARTUP/SHUTDOWN nécessitent une connexion **SYSDBA**, pas TECHSTORE.
 - Voir `02_connexion_datagrip.md` pour la configuration DataGrip.
+- Voir `07_sauvegarde_restauration/` pour les commandes RMAN.

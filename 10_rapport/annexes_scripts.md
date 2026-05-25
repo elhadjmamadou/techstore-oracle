@@ -68,11 +68,10 @@ Ce fichier liste les scripts et documents produits pour le projet.
 
 | Fichier | Role |
 |---|---|
-| 7_1_configuration_archivelog_fra.sql | Activation ARCHIVELOG et configuration FRA. |
-| 7_2_scripts_rman.rman | Sauvegarde RMAN niveau 0. |
-| backup_level1_cumulative.rman | Sauvegarde RMAN niveau 1 cumulative. |
-| strategie_sauvegarde.md | Documentation de la strategie. |
-| test_restauration.md | Tests de validation RMAN. |
+| 7_1_configuration_archivelog_fra.sql | Activation ARCHIVELOG et configuration FRA (exécuter en SYSDBA). |
+| 7_2_scripts_rman.rman | Scripts RMAN complets : niveau 0 (dimanche), niveau 1 cumulatif (lun-sam), validation et nettoyage. |
+| strategie_sauvegarde.md | Documentation de la strategie de sauvegarde. |
+| test_restauration.md | Procedures de test et de restauration RMAN. |
 
 ## 08_procedures_declencheurs
 

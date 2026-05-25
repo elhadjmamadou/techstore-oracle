@@ -1,26 +1,102 @@
-rman target /
+-- ============================================================
+-- Projet  : TechStore Oracle
+-- Fichier : 7_2_scripts_rman.rman
+-- Objectif: Scripts RMAN de sauvegarde incrémentale (niveaux 0 et 1)
+-- ============================================================
+-- ⚠️  CE FICHIER CONTIENT DES COMMANDES RMAN — PAS DU SQL.
+--     Ne pas l'exécuter dans DataGrip, SQL*Plus ou le schéma TECHSTORE.
+--
+-- Exécution depuis le terminal Ubuntu (hors conteneur) :
+--   docker exec -it oracle-free bash -c "rman target / @/chemin/vers/7_2_scripts_rman.rman"
+--
+-- OU en entrant dans le conteneur, puis en lançant RMAN :
+--   docker exec -it oracle-free bash
+--   rman target /
+--   RMAN> @/chemin/vers/7_2_scripts_rman.rman
+--
+-- OU commandes manuelles une par une dans la session RMAN :
+--   docker exec -it oracle-free bash
+--   rman target /
+-- ============================================================
+
+-- ===========================================================
+-- SECTION 1 : CONFIGURATION RMAN (à exécuter une seule fois)
+-- ===========================================================
+
+-- Politique de rétention : 7 jours
 CONFIGURE RETENTION POLICY TO RECOVERY WINDOW OF 7 DAYS;
 
+-- Sauvegarde automatique du fichier de contrôle après chaque backup
 CONFIGURE CONTROLFILE AUTOBACKUP ON;
 
+-- Type de sauvegarde : BACKUPSET sur disque
 CONFIGURE DEVICE TYPE DISK BACKUP TYPE TO BACKUPSET;
 
-CONFIGURE CHANNEL DEVICE TYPE DISK FORMAT '/opt/oracle/oradata/recovery_area/%U';
+-- Destination des sauvegardes (utilise la FRA configurée dans 7_1)
+CONFIGURE CHANNEL DEVICE TYPE DISK FORMAT '%d_%U';
 
+-- Afficher la configuration actuelle
 SHOW ALL;
 
+-- ===========================================================
+-- SECTION 2 : VÉRIFICATION AVANT SAUVEGARDE
+-- ===========================================================
+
+-- Vérifier l'état des sauvegardes existantes
 CROSSCHECK BACKUP;
 
+-- Vérifier les archive logs
 CROSSCHECK ARCHIVELOG ALL;
 
+-- Supprimer les sauvegardes expirées (inaccessibles sur disque)
 DELETE NOPROMPT EXPIRED BACKUP;
 
+-- Supprimer les archive logs expirés
 DELETE NOPROMPT EXPIRED ARCHIVELOG ALL;
 
-BACKUP INCREMENTAL LEVEL 0 DATABASE PLUS ARCHIVELOG DELETE INPUT TAG 'BACKUP_LEVEL0_DIMANCHE';
+-- ===========================================================
+-- SECTION 3A : SAUVEGARDE NIVEAU 0 (DIMANCHE — sauvegarde complète)
+-- ===========================================================
 
-BACKUP INCREMENTAL LEVEL 1 CUMULATIVE DATABASE PLUS ARCHIVELOG DELETE INPUT TAG 'BACKUP_LEVEL1_CUMUL';
+BACKUP INCREMENTAL LEVEL 0 DATABASE
+    PLUS ARCHIVELOG DELETE INPUT
+    TAG 'BACKUP_LEVEL0_DIMANCHE';
 
+-- Sauvegarde explicite du fichier de contrôle
 BACKUP CURRENT CONTROLFILE TAG 'BACKUP_CONTROLFILE';
 
+-- ===========================================================
+-- SECTION 3B : SAUVEGARDE NIVEAU 1 CUMULATIF (LUNDI → SAMEDI)
+-- ===========================================================
+-- À exécuter les jours de lundi à samedi.
+-- Sauvegarde uniquement les blocs modifiés depuis le dernier niveau 0.
+
+BACKUP INCREMENTAL LEVEL 1 CUMULATIVE DATABASE
+    PLUS ARCHIVELOG DELETE INPUT
+    TAG 'BACKUP_LEVEL1_CUMUL';
+
+-- ===========================================================
+-- SECTION 4 : NETTOYAGE DES SAUVEGARDES OBSOLÈTES
+-- ===========================================================
+-- ⚠️  DELETE NOPROMPT OBSOLETE supprime sans confirmation.
+--     Vérifier avec REPORT OBSOLETE avant si nécessaire.
+
+REPORT OBSOLETE;
+
 DELETE NOPROMPT OBSOLETE;
+
+-- ===========================================================
+-- SECTION 5 : VALIDATION DES SAUVEGARDES (sans écraser la base)
+-- ===========================================================
+
+-- Liste des sauvegardes disponibles
+LIST BACKUP SUMMARY;
+
+-- Test de restauration en mode VALIDATE (simulation, aucune écriture)
+RESTORE DATABASE VALIDATE;
+RESTORE ARCHIVELOG ALL VALIDATE;
+
+-- ===========================================================
+-- FIN DU SCRIPT RMAN
+-- ===========================================================
+EXIT;
